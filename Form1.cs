@@ -329,6 +329,7 @@ namespace WikiApp
             toolStripStatusLabel1.Text = "";
         }
 
+        // Save record into the file
         private void SaveRecords(String fileName)
         {
             try
