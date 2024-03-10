@@ -1,11 +1,18 @@
 ﻿using System;
-using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
 namespace WikiApp
 {
+
+    // Vanie Devi Srinivasan
+    // Date: 11/03/2024
+    // Version: 1
+    // Name of the program: Wiki Application
+    // Description: This Wiki application is to facilitate add, edit, delete, search and  
+    // manage the wiki data records.
+
     public partial class Form1 : Form
     {
         public Form1()
@@ -14,14 +21,15 @@ namespace WikiApp
         }
 
         #region "Initialize the Wiki 2D Array"
+        // Create and Initialize a wiki 2D array
         static int ROW = 20;
         static int COL = 4;
-        string[,] wiki = new string[ROW, COL];
-        int ptr = 0;
-        private int x;
+        string[,] wiki = new string[ROW, COL];       
         #endregion
 
         #region "Display the list of Wiki definitions"
+        
+        //Display the Wiki definitions details from 2D array into the List view
         private void DisplayArray()
         {
             listView1.Items.Clear();
@@ -46,7 +54,8 @@ namespace WikiApp
         #endregion
 
         #region "Add a new Wiki definition record"
-        // Add Button : Click action
+
+        // Add Button : Add a new Wiki definition record
         private void AddButton_Click(object sender, EventArgs e)
         {
             toolStripStatusLabel1.Text = "Adding a new Wiki Record...";
@@ -76,10 +85,10 @@ namespace WikiApp
         #endregion
 
         #region "Display selected record from list into the Textboxes"
+
+        // Display selected record from list into the Textboxes
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // To display the selected data in the text box
-
             if (listView1.SelectedIndices.Count > 0)
             {
                 var lvi = listView1.SelectedItems[0];
@@ -109,7 +118,8 @@ namespace WikiApp
         #endregion
 
         #region "Edit a Wiki definition record"
-        // Edit Button: Click Action
+
+        // Edit Button: Edit the selected Wiki definition record and update the 2D array
         private void button4_Click(object sender, EventArgs e)
         {
             toolStripStatusLabel1.Text = "Editing the selected Wiki Record...";
@@ -147,7 +157,8 @@ namespace WikiApp
         #endregion
 
         #region "Delete a Wiki definition record"
-        // Delete Button : click action
+
+        // Delete Button : Delete the selected Wiki record and remove them from 2D array
         private void button5_Click(object sender, EventArgs e)
         {
             toolStripStatusLabel1.Text = "Deleting the selected Wiki Record...";
@@ -196,6 +207,8 @@ namespace WikiApp
         #endregion
 
         #region "Search a Wiki definition record"
+
+        // Search Button: Search for the input key using binary search method
         private void Search_Click(object sender, EventArgs e)
         {
             toolStripStatusLabel1.Text = "Searching Wiki list for a Record...";
@@ -254,7 +267,8 @@ namespace WikiApp
         #endregion
 
         #region "Load Wiki definitions from dat file"
-        // Open the wiki data file
+
+        // Load the wiki records from input data file
         private void button1_Click(object sender, EventArgs e)
         {
             toolStripStatusLabel1.Text = "Loading Wiki Records from data file...";
@@ -275,6 +289,7 @@ namespace WikiApp
             toolStripStatusLabel1.Text = "";
         }
 
+        // Open and read the wiki data file
         private void OpenRecords(String fileName)
         {
             try
@@ -309,7 +324,8 @@ namespace WikiApp
         #endregion
 
         #region "Save Wiki definitions list into a dat file"
-        // Save the wiki data file
+
+        // Save Button: Save the wiki records into a data file
         private void button2_Click(object sender, EventArgs e)
         {
             toolStripStatusLabel1.Text = "Saving Wiki Records to data file...";
@@ -329,7 +345,7 @@ namespace WikiApp
             toolStripStatusLabel1.Text = "";
         }
 
-        // Save record into the file
+        // Write data into the file
         private void SaveRecords(String fileName)
         {
             try
@@ -362,6 +378,8 @@ namespace WikiApp
         #endregion
 
         #region "Clear the text boxes"
+
+        // Clear Button: Clear the input text boxes
         private void button2_Click_1(object sender, EventArgs e)
         {
             textBox1.Clear();
@@ -374,6 +392,8 @@ namespace WikiApp
         #endregion
 
         #region "Sort the Wiki list based on Name"
+
+        // Sort function that orders the wiki data in the 2D array based on bubble sort method
         private void sort()
         {
             int rows = ROW;
@@ -402,6 +422,7 @@ namespace WikiApp
             }
         }
 
+        // Swap function that supports sort operation. This is to swap the values between two index in 2D array
         private void Swap(int indx)
         {
             string temp = "";
@@ -416,7 +437,9 @@ namespace WikiApp
 
         #endregion
 
-        #region "Exist the program"
+        #region "Exit the program"
+
+        // Exit Button: Close the application
         private void button1_Click_1(object sender, EventArgs e)
         {
             Environment.Exit(0);
