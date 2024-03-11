@@ -38,7 +38,7 @@ namespace WikiApp
 
             sort();
 
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < ROW; i++)
             {
                 if (wiki[i, 0] != null)
                 {
@@ -62,20 +62,27 @@ namespace WikiApp
         {
             toolStripStatusLabel1.Text = "Adding a new Wiki Record...";
 
-            for (int i = 0; i < 12; i++)
+            if (wiki[ROW-1, 0] != null)
             {
-                if (wiki[i, 0] == null)
-                {
-                    wiki[i, 0] = textBox1.Text;
-                    wiki[i, 1] = textBox2.Text;
-                    wiki[i, 2] = textBox3.Text;
-                    wiki[i, 3] = textBox4.Text;
-
-                    break;
-                }
+                MessageBox.Show("Wiki definition array is full and can't add anymore new records...");
             }
+            else
+            {
+                for (int i = 0; i < ROW; i++)
+                {
+                    if (wiki[i, 0] == null)
+                    {
+                        wiki[i, 0] = textBox1.Text;
+                        wiki[i, 1] = textBox2.Text;
+                        wiki[i, 2] = textBox3.Text;
+                        wiki[i, 3] = textBox4.Text;
 
-            DisplayArray();
+                        break;
+                    }
+                }
+
+                DisplayArray();
+            }
 
             textBox1.Clear();
             textBox2.Clear();
@@ -95,7 +102,7 @@ namespace WikiApp
             {
                 var lvi = listView1.SelectedItems[0];
 
-                for (int i = 0; i < 20; i++)
+                for (int i = 0; i < ROW; i++)
                 {
                     if (wiki[i, 0] != null)
                     {
@@ -126,7 +133,7 @@ namespace WikiApp
         {
             toolStripStatusLabel1.Text = "Editing the selected Wiki Record...";
 
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < ROW; i++)
             {
                 if (wiki[i, 0] != null)
                 {
@@ -169,7 +176,7 @@ namespace WikiApp
 
             if (result == DialogResult.OK)
             {
-                for (int i = 0; i < 20; i++)
+                for (int i = 0; i < ROW; i++)
                 {
                     if (wiki[i, 0] != null)
                     {
@@ -230,7 +237,7 @@ namespace WikiApp
                 int min = 0;
                 int max = 0;
 
-                for (int i = 0; i < 20; i++)
+                for (int i = 0; i < ROW; i++)
                 {
                     if (wiki[i, 0] != null)
                     {
@@ -285,18 +292,9 @@ namespace WikiApp
         {
             toolStripStatusLabel1.Text = "Loading Wiki Records from data file...";
 
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            OpenRecords(Application.StartupPath + "\\" + "definitions.dat");
 
-            openFileDialog.InitialDirectory = Application.StartupPath;
-            openFileDialog.Filter = "*.dat|"; 
-            openFileDialog.Title = "Open a dat file";
-
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                OpenRecords(openFileDialog.FileName);
-
-                DisplayArray();
-            }
+            DisplayArray();
 
             toolStripStatusLabel1.Text = "";
         }
@@ -346,8 +344,6 @@ namespace WikiApp
             saveFileDialog.Filter = "dat file|*.dat";
             saveFileDialog.Title = "Save a dat file";
             saveFileDialog.InitialDirectory = Application.StartupPath;
-            // saveFileDialog.Filter = "wiki-data-v1.dat|";
-            // saveFileDialog.Title = "Save a dat file";
             saveFileDialog.DefaultExt = "dat";
             saveFileDialog.ShowDialog();
             string filename = saveFileDialog.FileName;
@@ -361,12 +357,8 @@ namespace WikiApp
             {
                 SaveRecords("Default,Dat");
             }
-        
-
-            
 
             toolStripStatusLabel1.Text = "";
-            
         }
                 
 
