@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics.Eventing.Reader;
+using System.Drawing.Text;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
@@ -22,7 +24,7 @@ namespace WikiApp
 
         #region "Initialize the Wiki 2D Array"
         // Create and Initialize a wiki 2D array
-        static int ROW = 20;
+        static int ROW = 12;
         static int COL = 4;
         string[,] wiki = new string[ROW, COL];       
         #endregion
@@ -60,7 +62,7 @@ namespace WikiApp
         {
             toolStripStatusLabel1.Text = "Adding a new Wiki Record...";
 
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 12; i++)
             {
                 if (wiki[i, 0] == null)
                 {
@@ -214,56 +216,66 @@ namespace WikiApp
             toolStripStatusLabel1.Text = "Searching Wiki list for a Record...";
 
             var searchInput = SearchInput.Text;
-
-            Boolean found = false;
-
-            int min = 0;
-            int max = 0;
-
-            for (int i = 0; i < 20; i++)
+            if (searchInput.Trim().Length == 0)
             {
-                if (wiki[i,0] != null)
-                {
-                    max = i;
-                }
-            }
+                toolStripStatusLabel1.Text = "TextBox is Empty...";
+                MessageBox.Show("Invalid Input!");
 
-            while (min <= max)
-            {
-                int mid = (min + max) / 2;
-
-                if (searchInput.ToLower() == wiki[mid, 0].ToLower())
-                {
-                    textBox1.Text = wiki[mid, 0];
-                    textBox2.Text = wiki[mid, 1];
-                    textBox3.Text = wiki[mid, 2];
-                    textBox4.Text = wiki[mid, 3];
-                    found = true;
-                    break;
-                }
-                else if (string.Compare(searchInput, wiki[mid, 0], true) < 0)
-                {
-                    max = mid - 1;
-                }
-                else
-                {
-                    min = mid + 1;
-                }
-            }
-
-            if (found)
-            {
-                MessageBox.Show("Search found...");
             }
             else
             {
-                MessageBox.Show("Search not found...");
+
+                Boolean found = false;
+
+                int min = 0;
+                int max = 0;
+
+                for (int i = 0; i < 20; i++)
+                {
+                    if (wiki[i, 0] != null)
+                    {
+                        max = i;
+                    }
+                }
+
+                while (min <= max)
+                {
+                    int mid = (min + max) / 2;
+
+                    if (searchInput.ToLower() == wiki[mid, 0].ToLower())
+                    {
+                        textBox1.Text = wiki[mid, 0];
+                        textBox2.Text = wiki[mid, 1];
+                        textBox3.Text = wiki[mid, 2];
+                        textBox4.Text = wiki[mid, 3];
+                        found = true;
+                        break;
+                    }
+                    else if (string.Compare(searchInput, wiki[mid, 0], true) < 0)
+                    {
+                        max = mid - 1;
+                    }
+                    else
+                    {
+                        min = mid + 1;
+                    }
+                }
+
+                if (found)
+                {
+                    MessageBox.Show("Search found...");
+                }
+                else
+                {
+                    MessageBox.Show("Search not found...");
+                }
+
+                SearchInput.Clear();
+
+                toolStripStatusLabel1.Text = "";
             }
-
-            SearchInput.Clear();
-
-            toolStripStatusLabel1.Text = "";
         }
+
         #endregion
 
         #region "Load Wiki definitions from dat file"
@@ -331,26 +343,39 @@ namespace WikiApp
             toolStripStatusLabel1.Text = "Saving Wiki Records to data file...";
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.InitialDirectory = Application.StartupPath;
-            saveFileDialog.Filter = "*.dat|";
+            saveFileDialog.Filter = "dat file|*.dat";
             saveFileDialog.Title = "Save a dat file";
+            saveFileDialog.InitialDirectory = Application.StartupPath;
+            // saveFileDialog.Filter = "wiki-data-v1.dat|";
+            // saveFileDialog.Title = "Save a dat file";
             saveFileDialog.DefaultExt = "dat";
+            saveFileDialog.ShowDialog();
+            string filename = saveFileDialog.FileName;
 
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            if (saveFileDialog.FileName != "")
             {
                 SaveRecords(saveFileDialog.FileName);
                 MessageBox.Show("Wiki data file saved - " + saveFileDialog.FileName);
             }
+            else
+            {
+                SaveRecords("Default,Dat");
+            }
+        
+
+            
 
             toolStripStatusLabel1.Text = "";
+            
         }
+                
 
         // Write data into the file
-        private void SaveRecords(String fileName)
+        private void SaveRecords(String saveFileName)
         {
             try
             {
-                using (var stream = File.Open(fileName, FileMode.Create))
+                using (var stream = File.Open(saveFileName, FileMode.Create))
                 {
                     using (var writer = new BinaryWriter(stream, Encoding.UTF8, false))
                     {
